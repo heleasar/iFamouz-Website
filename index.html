@@ -74,47 +74,52 @@
         </div>
         <div class="red-spacer"></div>
 
-        <!-- pizza grid -->
+        <!-- powder grid -->
         <div class="powders">
             <h2>Favorites</h2>
             <div class="powder-grid">
                 <div class="powder-child">
-                    <h4>Black Jacket $64.99</h4>
+                    <a href="https://alphaleteathletics.com/products/mens-member-vintage-zip-up-black" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: block;">
+                    <h4>Men's Heavy Weight Zip Hoodie $85.00</h4>
                     <img src="images/sweater.png" alt="alphalete black jacket" loading="lazy"
                         style="width: 100%;">
+                    </a>
                     <button class="add-to-cart">Add to Cart</button>
-                    <div class="add-selected">
-                        <button><i class="fa-solid fa-minus"></i></button>
-                        <h4>0</h4>
-                        <button><i class="fa-solid fa-plus"></i></button>
+    <div class="add-selected">
+        <button class="decrease"><i class="fa-solid fa-minus"></i></button>
+        <h4 class="quantity">0</h4>
+        <button class="increase"><i class="fa-solid fa-plus"></i></button>
 
                     </div>
                 </div>
                 <div class="powder-child">
-                    <h4>Black Sweatpants M $44.99</h4>
-                    <img src="images/sweats.png" alt="alphalete sweatpants for men" loading="lazy"
-                        style="width: 100%;">
-                    <button class="add-to-cart">Add to Cart</button>
-                    <div class="add-selected">
-                        <button><i class="fa-solid fa-minus"></i></button>
-                        <h4>0</h4>
-                        <button><i class="fa-solid fa-plus"></i></button>
-
+                    <a href="https://alphaleteathletics.com/products/mens-member-vintage-jogger-black" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: block;">
+                    <h4>Men's Heavy Weight Gym Jogger $70.00</h4>
+                    <img src="images/sweats.png" alt="alphalete sweatpants for men" loading="lazy"  style="width: 100%;">
+                </a>
+                <button class="add-to-cart">Add to Cart</button>
+                <div class="add-selected">
+                    <button class="decrease"><i class="fa-solid fa-minus"></i></button>
+                    <h4 class="quantity">0</h4>
+                    <button class="increase"><i class="fa-solid fa-plus"></i></button>
+            
+            
                     </div>
                 </div>
                 <div class="powder-child">
-                    <h4>Green Sweatpants W $34.99</h4>
-                    <img src="images/wsweats.png" alt="alphalete sweatpants for women" loading="lazy"
-                        style="width: 100%;">
+                    <a href="https://alphaleteathletics.com/products/womens-tenacity-neil-bodysuit-chelsea" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: block;">
+                        <h4>Women's Tenacity Open Back Flared Bodysuit $72.00</h4>
+                        <img src="images/wsweats.png" alt="alphalete sweatpants for women" loading="lazy" style="width: 100%;">
+                    </a>
                     <button class="add-to-cart">Add to Cart</button>
-                    <div class="add-selected">
-                        <button><i class="fa-solid fa-minus"></i></button>
-                        <h4>0</h4>
-                        <button><i class="fa-solid fa-plus"></i></button>
+    <div class="add-selected">
+        <button class="decrease"><i class="fa-solid fa-minus"></i></button>
+        <h4 class="quantity">0</h4>
+        <button class="increase"><i class="fa-solid fa-plus"></i></button>
 
                     </div>
                 </div>
-
+                
             </div>
 
         </div>
@@ -142,5 +147,41 @@
         </div>
     </footer>
 </body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    // Select all the "Add to Cart" buttons
+    document.querySelectorAll(".powder-child").forEach((item) => {
+        let quantityElement = item.querySelector(".quantity");
+        let addToCartButton = item.querySelector(".add-to-cart");
+        let increaseButton = item.querySelector(".increase");
+        let decreaseButton = item.querySelector(".decrease");
+
+        let quantity = 0; // Default quantity
+
+        // Add to Cart Button - Increases quantity
+        addToCartButton.addEventListener("click", function () {
+            quantity++;
+            quantityElement.textContent = quantity;
+        });
+
+        // Plus Button - Increases quantity
+        increaseButton.addEventListener("click", function () {
+            quantity++;
+            quantityElement.textContent = quantity;
+        });
+
+        // Minus Button - Decreases quantity but not below 0
+        decreaseButton.addEventListener("click", function () {
+            if (quantity > 0) {
+                quantity--;
+                quantityElement.textContent = quantity;
+            }
+        });
+    });
+});
+
+</script>
+<button id="checkout-button">Checkout</button>
 
 </html>

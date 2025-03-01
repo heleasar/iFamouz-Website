@@ -20,6 +20,86 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="scripts/scripts.js" defer></script>
 </head>
+<script src="https://buy.stripe.com/6oE7t83TqdXO9OgeUU"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("Order page script loaded!"); // Debugging step
+
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let cartContainer = document.getElementById("cart-items");
+        let totalPriceElement = document.getElementById("total-price");
+        let clearCartButton = document.getElementById("clear-cart");
+        let payButton = document.getElementById("pay-button");
+        const stripe = Stripe("pk_live_51Qjc4wK1pDPAU1Jjo7hjLwND2QqV1T0wr6Hs1JiUJvRguQm9won8W0WrOQYHbDiTpyTJIVm6FGGRdY3TepYQ6rbz00beLi746s"); // Replace with your Stripe Public Key
+
+        if (!clearCartButton || !payButton) {
+            console.error("Clear Cart or Pay button not found!");
+            return;
+        }
+
+        function calculateTotal() {
+            let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            totalPriceElement.textContent = total.toFixed(2);
+        }
+
+        function renderCart() {
+            cartContainer.innerHTML = "";
+            if (cart.length === 0) {
+                cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+                totalPriceElement.textContent = "0.00";
+                return;
+            }
+
+            cart.forEach((item) => {
+                let div = document.createElement("div");
+                div.innerHTML = `<p>${item.name} - Quantity: ${item.quantity} - $${(item.price * item.quantity).toFixed(2)}</p>`;
+                cartContainer.appendChild(div);
+            });
+
+            calculateTotal();
+        }
+
+        // Display cart when page loads
+        renderCart();
+
+        // Fix: Make sure Clear Cart button works
+        clearCartButton.addEventListener("click", function () {
+            console.log("Clear Cart clicked!");
+            localStorage.removeItem("cart");
+            cart = [];
+            renderCart();
+        });
+
+        // Fix: Make sure Submit & Pay button works
+        payButton.addEventListener("click", async function () {
+            console.log("Submit Payment clicked!");
+
+            if (cart.length === 0) {
+                alert("Your cart is empty. Add items before checkout.");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:3000/create-checkout-session", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ cart }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const session = await response.json();
+                console.log("Stripe Session ID:", session.id);
+                stripe.redirectToCheckout({ sessionId: session.id });
+            } catch (error) {
+                console.error("Payment error:", error);
+                alert("Payment failed. Check the console for details.");
+            }
+        });
+    });
+</script>
 
 <body>
     <!-- overlay for mobile -->
@@ -61,6 +141,14 @@
     </header>
 
     <main>
+        <div id="cart-container">
+            <h2>Your Cart</h2>
+            <div id="cart-items"></div>
+            <h3>Total: $<span id="total-price">0.00</span></h3>
+            <button id="clear-cart">Clear Cart</button>
+            <button id="pay-button">Submit & Pay</button>
+        </div>
+              
         <div class="red-spacer"></div>
 
         <!-- form -->
@@ -114,9 +202,10 @@
                         </div>
                     </div>
                     <div class="form-btn">
-                        <button type="reset" value="Reset">Cancel</button>
-                        <button type="submit" value="Submit">Submit</button>
+                        <button type="reset">Cancel</button>
+                        <button type="button" id="pay-button">Submit & Pay</button>
                     </div>
+                    
                 </form>
 
             </div>

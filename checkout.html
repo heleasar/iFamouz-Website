@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <script src="https://buy.stripe.com/6oE7t83TqdXO9OgeUU"></script> <!-- Stripe Payment -->
+    <link href="styles/styles.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Checkout</h1>
+    <div id="cart-items"></div>
+    <button id="pay-button">Pay Now</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let cartContainer = document.getElementById("cart-items");
+
+            cart.forEach((item) => {
+                let div = document.createElement("div");
+                div.textContent = `${item.name} - Quantity: ${item.quantity}`;
+                cartContainer.appendChild(div);
+            });
+
+            document.getElementById("pay-button").addEventListener("click", function () {
+                alert("Redirecting to payment...");
+                window.location.href = "https://buy.stripe.com/6oE7t83TqdXO9OgeUU"; // Replace with Stripe/PayPal integration
+            });
+        });
+    </script>
+</body>
+</html>
